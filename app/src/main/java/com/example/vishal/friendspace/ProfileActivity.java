@@ -12,9 +12,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.facebook.CallbackManager;
+
 public class ProfileActivity extends AppCompatActivity {
 
     private TextView textView;
+    private CallbackManager callbackManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,9 +32,16 @@ public class ProfileActivity extends AppCompatActivity {
         //Fetching email from shared preferences
         SharedPreferences sharedPreferences = getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         String email = sharedPreferences.getString(Config.EMAIL_SHARED_PREF,"Not Available");
-
+        Bundle inBundle = getIntent().getExtras();
+        String name = inBundle.get("name").toString();
+        String surname = inBundle.get("surname").toString();
+        //String imageUrl = inBundle.get("imageUrl").toString();
         //Showing the current logged in email to textview
         textView.setText("Current User: " + email);
+
+
+        textView.setText("Name : " +name + "\n Surname : "+surname);
+
     }
     //Logout function
     private void logout(){
@@ -60,6 +70,7 @@ public class ProfileActivity extends AppCompatActivity {
                         //Starting login activity
                         Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                 });
 

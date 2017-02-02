@@ -10,6 +10,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -19,6 +20,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.Profile;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +38,10 @@ public class LoginActivity extends AppCompatActivity{
     private EditText editTextEmail;
     private EditText editTextPassword;
     private AppCompatButton buttonLogin;
+    private LoginButton btnFbLogin;
+    private TextView linkSignUp;
     private ProgressDialog pDialog;
+    private CallbackManager callbackManager;
     //boolean variable to check user is logged in or not
     //initially it is false
     private boolean loggedIn = false;
@@ -37,6 +49,13 @@ public class LoginActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Initialize the sdk
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
+        // Initialize theinstance of CallbackManager
+        callbackManager = CallbackManager.Factory.create();
+
         setContentView(R.layout.activity_login);
 
         // Progress dialog
@@ -47,7 +66,57 @@ public class LoginActivity extends AppCompatActivity{
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
 
-        buttonLogin = (AppCompatButton) findViewById(R.id.buttonLogin);
+        buttonLogin = (AppCompatButton) findViewById(R.id.btnLogin);
+        btnFbLogin = (LoginButton) findViewById(R.id.btnFLogin);
+        linkSignUp = (TextView) findViewById(R.id.linkSignup);
+
+        linkSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sign = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(sign);
+            }
+        });
+
+
+
+
+        btnFbLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                    Intent user = new Intent(LoginActivity.this, ProfileActivity.class);
+                    user.putExtra("name", loginResult.getAccessToken().getUserId());
+                    user.putExtra("surname", loginResult.getAccessToken().getToken());
+                    //  main.putExtra("imageUrl", profile.getProfilePictureUri(200,200).toString());
+                    startActivity(user);
+                //nextActivity(profile);
+                Toast.makeText(getApplicationContext(), "Logging in...", Toast.LENGTH_SHORT).show();
+                /*info.setText(
+                        "User ID: "
+                                + loginResult.getAccessToken().getUserId()
+                                + "\n" +
+                                "Auth Token: "
+                                + loginResult.getAccessToken().getToken()
+                );*/
+
+            }
+
+            @Override
+            public void onCancel() {
+
+                Toast.makeText(getApplicationContext(),"Login attempt canceled",Toast.LENGTH_SHORT).show();
+                //info.setText("Login attempt canceled.");
+
+            }
+
+            @Override
+            public void onError(FacebookException e) {
+
+                Toast.makeText(getApplicationContext(),"Login attempt failed",Toast.LENGTH_SHORT).show();
+                //info.setText("Login attempt failed.");
+
+            }
+        });
 
         //Adding click listener
         buttonLogin.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +139,26 @@ public class LoginActivity extends AppCompatActivity{
             }
         });
 
+        /*linkSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent signUp = new Intent(LoginActivity.this,RegisterActivity.class);
+                startActivity(signUp);
+            }
+        });*/
+
     }
+
+    private void nextActivity(Profile profile) {
+        if(profile != null){
+            Intent user = new Intent(LoginActivity.this, ProfileActivity.class);
+            user.putExtra("name", profile.getFirstName());
+            user.putExtra("surname", profile.getLastName());
+            //  main.putExtra("imageUrl", profile.getProfilePictureUri(200,200).toString());
+            startActivity(user);
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -162,4 +250,8 @@ public class LoginActivity extends AppCompatActivity{
             pDialog.show();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
 }
