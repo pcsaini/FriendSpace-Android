@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,9 +38,8 @@ public class LoginActivity extends AppCompatActivity{
     //Defining views
     private EditText editTextEmail;
     private EditText editTextPassword;
-    private AppCompatButton buttonLogin;
+    private Button buttonLogin,linkSignUp;
     private LoginButton btnFbLogin;
-    private TextView linkSignUp;
     private ProgressDialog pDialog;
     private CallbackManager callbackManager;
     //boolean variable to check user is logged in or not
@@ -66,15 +66,16 @@ public class LoginActivity extends AppCompatActivity{
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
 
-        buttonLogin = (AppCompatButton) findViewById(R.id.btnLogin);
+        buttonLogin = (Button) findViewById(R.id.btnLogin);
         btnFbLogin = (LoginButton) findViewById(R.id.btnFLogin);
-        linkSignUp = (TextView) findViewById(R.id.linkSignup);
+        linkSignUp = (Button) findViewById(R.id.linkSignUp);
 
         linkSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent sign = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(sign);
+                finish();
             }
         });
 
@@ -139,13 +140,6 @@ public class LoginActivity extends AppCompatActivity{
             }
         });
 
-        /*linkSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent signUp = new Intent(LoginActivity.this,RegisterActivity.class);
-                startActivity(signUp);
-            }
-        });*/
 
     }
 

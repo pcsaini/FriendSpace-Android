@@ -33,14 +33,14 @@ public class ProfileActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         String email = sharedPreferences.getString(Config.EMAIL_SHARED_PREF,"Not Available");
         Bundle inBundle = getIntent().getExtras();
-        String name = inBundle.get("name").toString();
-        String surname = inBundle.get("surname").toString();
+        //String name = inBundle.get("name").toString();
+        //String surname = inBundle.get("surname").toString();
         //String imageUrl = inBundle.get("imageUrl").toString();
         //Showing the current logged in email to textview
         textView.setText("Current User: " + email);
 
 
-        textView.setText("Name : " +name + "\n Surname : "+surname);
+        //textView.setText("Name : " +name + "\n Surname : "+surname);
 
     }
     //Logout function
