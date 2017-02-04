@@ -30,6 +30,8 @@ import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.w3c.dom.Text;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +40,8 @@ public class LoginActivity extends AppCompatActivity{
     //Defining views
     private EditText editTextEmail;
     private EditText editTextPassword;
-    private Button buttonLogin,linkSignUp;
+    private Button buttonLogin;
+    private TextView linkSignUp;
     private LoginButton btnFbLogin;
     private ProgressDialog pDialog;
     private CallbackManager callbackManager;
@@ -68,7 +71,7 @@ public class LoginActivity extends AppCompatActivity{
 
         buttonLogin = (Button) findViewById(R.id.btnLogin);
         btnFbLogin = (LoginButton) findViewById(R.id.btnFLogin);
-        linkSignUp = (Button) findViewById(R.id.linkSignUp);
+        linkSignUp = (TextView) findViewById(R.id.linkSignUp);
 
         linkSignUp.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -8,18 +8,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterActivity extends AppCompatActivity{
 
     private EditText editTextName;
     private EditText editTextUsername;
     private EditText editTextPassword;
     private EditText editTextEmail;
 
-    private Button buttonRegister,linkLogin;
+    private Button buttonRegister;
+    private TextView linkLogin;
 
     private static final String REGISTER_URL = "https://friendspaceandorid.000webhostapp.com/register.php";
 
@@ -34,21 +38,22 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
 
         buttonRegister = (Button) findViewById(R.id.btnSingUp);
-        linkLogin = (Button) findViewById(R.id.linkSignUp);
+        linkLogin = (TextView) findViewById(R.id.linkLogin);
 
-        buttonRegister.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        if(v == buttonRegister){
-            registerUser();
-        }
-        else if(v == linkLogin){
-            Intent login = new Intent(RegisterActivity.this, LoginActivity.class);
-            startActivity(login);
-            finish();
-        }
+        buttonRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                registerUser();
+            }
+        });
+        linkLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    Intent login = new Intent(RegisterActivity.this, LoginActivity.class);
+                    startActivity(login);
+                    finish();
+            }
+        });
     }
 
     private void registerUser() {
